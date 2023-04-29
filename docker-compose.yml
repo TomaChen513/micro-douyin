@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  mini-tiktok_net:
+    driver: bridge
+
+services:
+  
+  mini_tiktok:
+    # image: lyumikael/gomodd:v1.0.0 # if you "macOs intel" or "linux amd"
+    image: lyumikael/go-modd-env  # if you macOs m1
+    build:
+      context: .
+      dockerfile: deploy/modd.DockerFile
+    container_name: mini-tiktok
+    environment:
+      TZ: Asia/Shanghai
+      GOPROXY: https://goproxy.cn,direct
+    working_dir: /Users/toma/Projects/micro-douyin
+    volumes:
+      - .:/Users/toma/Projects/micro-douyin
+    privileged: true
+    restart: always
+    networks:
+      - mini-tiktok_net
+    ports:
+      - "8888:8888"
+      - "8080:8080"
+      # - "9002:9002"
+      # - "9003:9003"
