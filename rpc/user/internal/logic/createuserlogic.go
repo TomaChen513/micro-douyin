@@ -26,5 +26,6 @@ func NewCreateUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Create
 func (l *CreateUserLogic) CreateUser(in *user.CreateUserRequest) (*user.CreatUserReply, error) {
 	// todo: add your logic here and delete this line
 
-	return &user.CreatUserReply{}, nil
+	// testRPC
+	return &user.CreatUserReply{Id: 513}, nil
 }
