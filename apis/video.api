@@ -1,0 +1,124 @@
+syntax = "v1"
+
+import "dto.api"
+
+// 不需要鉴权的接口
+@server(
+	group: video
+)
+service app {
+	@handler GetVideoList // 视频流接口
+	get /douyin/feed (GetVideoListRequest) returns (GetVideoListReply)
+}
+
+// 视频流接口
+type (
+	GetVideoListRequest {
+		LatestTime int64  `form:"latest_time,optional"`
+		Token      string `form:"token,optional"`
+	}
+	GetVideoListReply {
+		BasicReply
+		NextTime  int64   `json:"next_time"`
+		VideoList []Video `json:"video_list"`
+	}
+)
+
+// 需要鉴权的接口
+@server(
+	middleware: Auth
+	group: video
+)
+service app {
+	@handler PublishVideo // 发布视频
+	post /douyin/publish/action (PublishVideoRequest) returns (PublishVideoReply)
+	
+	@handler PublishedList // 已发布的视频列表
+	get /douyin/publish/list (PublishedListRequest) returns (PublishedListReply)
+	
+	@handler FavoriteVideo // 点赞视频
+	post /douyin/favorite/action (FavoriteVideoRequest) returns (FavoriteVideoReply)
+	
+	@handler FavoriteList // 点赞列表
+	get /douyin/favorite/list (FavoriteListRequest) returns (FavoriteListReply)
+	
+	@handler CommentVideo // 评论视频
+	post /douyin/comment/action (CommentVideoRequest) returns (CommentVideoReply)
+	
+	@handler CommentList // 评论列表
+	get /douyin/comment/list (CommentListRequest) returns (CommentListReply)
+}
+
+// 发布视频
+type (
+	PublishVideoRequest {
+		Title string `form:"title"`
+		Token string `form:"token"`
+	}
+	PublishVideoReply {
+		BasicReply
+	}
+)
+
+// 已发布的视频列表
+type (
+	PublishedListRequest {
+		Token  string `form:"token"`
+		UserId int64  `form:"user_id"`
+	}
+	PublishedListReply {
+		BasicReply
+		VideoList []Video `json:"video_list"`
+	}
+)
+
+// 点赞视频
+type (
+	FavoriteVideoRequest {
+		VideoId    int64  `form:"video_id"`
+		Token      string `form:"token"`
+		ActionType int64  `form:"action_type"`
+	}
+	FavoriteVideoReply {
+		BasicReply
+	}
+)
+
+// 点赞列表
+type (
+	FavoriteListRequest {
+		Token  string `form:"token"`
+		UserId int64  `form:"user_id"`
+	}
+	FavoriteListReply {
+		BasicReply
+		VideoList []Video `json:"video_list"`
+	}
+)
+
+// 评论视频
+type (
+	CommentVideoRequest {
+		VideoId    int64  `form:"video_id"`
+		Token      string `form:"token"`
+		ActionType int64  `form:"action_type"`
+		Content    string `form:"comment_text"`
+		CommentId  int64  `form:"comment_id,optional"`
+	}
+	CommentVideoReply {
+		BasicReply
+		Comment Comment `json:"comment"`
+	}
+)
+
+// 评论列表
+type (
+	CommentListRequest {
+		Token   string `form:"token"`
+		VideoId int64  `form:"video_id"`
+	}
+	CommentListReply {
+		BasicReply
+		CommentList []Comment `json:"comment_list"`
+	}
+)

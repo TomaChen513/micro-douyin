@@ -1,0 +1,109 @@
+syntax = "v1"
+
+import "dto.api"
+
+// 不需要鉴权的接口
+@server(
+	group: user
+)
+service app {
+	@handler Register // 用户注册
+	post /douyin/user/register (RegisterRequest) returns (RegisterReply)
+	
+	@handler Login // 用户登录
+	post /douyin/user/login (LoginRequest) returns (LoginReply)
+}
+
+// 用户注册
+type (
+	RegisterRequest {
+		Username string `form:"username"`
+		Password string `form:"password"`
+	}
+	RegisterReply {
+		BasicReply
+		UserId int64  `json:"user_id"`
+		Token  string `json:"token"`
+	}
+)
+
+// 用户登录
+type (
+	LoginRequest {
+		Username string `form:"username"`
+		Password string `form:"password"`
+	}
+	LoginReply {
+		BasicReply
+		UserId int64  `json:"user_id"`
+		Token  string `json:"token"`
+	}
+)
+
+// 需要鉴权的接口
+@server(
+	group: user
+	middleware: Auth
+)
+service app {
+	@handler GetUserInfo // 获取用户信息
+	get /douyin/user (GetUserInfoRequest) returns (GetUserInfoReply)
+	
+	@handler Follow // 关注用户
+	post /douyin/relation/action (FollowRequest) returns (FollowReply)
+	
+	@handler FollowList // 获取关注列表
+	get /douyin/relation/follow/list (FollowListRequest) returns (FollowListReply)
+	
+	@handler FansList // 获取粉丝列表
+	get /douyin/relation/follower/list (FansListRequest) returns (FansListReply)
+}
+
+// 获取用户信息
+type (
+	GetUserInfoRequest {
+		UserId int64  `form:"user_id"`
+		Token  string `form:"token"`
+	}
+	GetUserInfoReply {
+		BasicReply
+		User User `json:"user"`
+	}
+)
+
+// 关注用户
+type (
+	FollowRequest {
+		// UserId     int64    `form:"user_id"`
+		Token      string `form:"token"`
+		ToUserId   int64  `form:"to_user_id"`
+		ActionType int64  `form:"action_type"`
+	}
+	FollowReply {
+		BasicReply
+	}
+)
+
+// 获取关注列表
+type (
+	FollowListRequest {
+		UserId int64  `form:"user_id"`
+		Token  string `form:"token"`
+	}
+	FollowListReply {
+		BasicReply
+		Users []User `json:"user_list"`
+	}
+)
+
+// 获取粉丝列表
+type (
+	FansListRequest {
+		UserId int64  `form:"user_id"`
+		Token  string `form:"token"`
+	}
+	FansListReply {
+		BasicReply
+		Users []User `json:"user_list"`
+	}
+)
