@@ -5,5 +5,17 @@ Port: 8888
 UserRPC:
   Etcd:
     Hosts:
-      - 172.31.144.25:2379
+      - 121.5.231.228:2379
     Key: user.rpc
+
+VideoRPC:
+  Etcd:
+    Hosts:
+      - 121.5.231.228:2379
+    Key: video.rpc
+
+InteractionRPC:
+  Etcd:
+    Hosts:
+      - 121.5.231.228:2379
+    Key: interaction.rpc

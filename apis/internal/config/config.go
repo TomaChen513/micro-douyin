@@ -8,4 +8,6 @@ import (
 type Config struct {
 	rest.RestConf
 	UserRPC zrpc.RpcClientConf
+	VideoRPC zrpc.RpcClientConf
+	InteractionRPC zrpc.RpcClientConf
 }

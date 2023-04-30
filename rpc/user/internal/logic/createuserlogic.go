@@ -27,5 +27,5 @@ func (l *CreateUserLogic) CreateUser(in *user.CreateUserRequest) (*user.CreatUse
 	// todo: add your logic here and delete this line
 
 	// testRPC
-	return &user.CreatUserReply{Id: 514}, nil
+	return &user.CreatUserReply{Id: 515}, nil
 }

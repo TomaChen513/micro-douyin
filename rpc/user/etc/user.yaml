@@ -2,5 +2,5 @@ Name: user.rpc
 ListenOn: 0.0.0.0:8080
 Etcd:
   Hosts:
-  - 172.31.144.25:2379
+  - 121.5.231.228:2379
   Key: user.rpc
